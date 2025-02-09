@@ -8,12 +8,18 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "cypress:open": "cypress open",
+    "e2e": "start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",
+    "e2e:headless": "start-server-and-test dev http://localhost:3000 \"cypress run --e2e\"",
+    "component": "cypress open --component",
+    "component:headless": "cypress run --component"
   },
   "dependencies": {
     "next": "15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "start-server-and-test": "^2.0.10"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -25,6 +31,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-jest": "^29.7.0",
+    "cypress": "^14.0.2",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "identity-obj-proxy": "^3.0.0",
