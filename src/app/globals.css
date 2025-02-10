@@ -1,21 +1,35 @@
+@import "material-icons/iconfont/material-icons.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-50: #0e1829;
+  --primary-100: #ffffff;
+  --primary-150: #0064fe;
+  --primary-200: #c0cff7;
+  --primary-250: #fba807;
+  --primary-300: #000000;
+
+  --secondary-50: #4a4a4a;
+  --secondary-100: #838383;
+  --secondary-150: #8d8d8d;
+  --secondary-200: #babac1;
+  --secondary-250: #f5f5f5;
+  --secondary-300: #ffffff45;
+  --secondary-350: #03030384;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* --primary-50: #0e1829;
+    --primary-100: #ffffff; */
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--primary-100);
+  background: var(--primary-50);
+  font-family: sans-serif, Arial;
 }
