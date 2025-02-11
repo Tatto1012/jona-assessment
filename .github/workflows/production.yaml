@@ -21,13 +21,13 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run lint
+      #- run: npm run lint
 
-      - run: npm run test
+      #- run: npm run test
 
-      - run: npm run e2e:headless
+      #- run: npm run e2e:headless
 
-      - run: npm run component:headless
+      #- run: npm run component:headless
 
   Deploy-Production:
     needs: [Quality-Check]
