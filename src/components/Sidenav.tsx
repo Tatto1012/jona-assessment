@@ -20,7 +20,10 @@ export default function Sidenav({ params, cruiselist }: SidenavProps) {
   const toggleSidenav = () => {};
 
   return (
-    <aside className="lg:w-3/12 bg-primary-50 px-7 py-3 relative">
+    <aside
+      className="lg:w-3/12 bg-primary-50 px-7 py-3 relative"
+      data-testid="sidenav"
+    >
       <div className="flex justify-end mt-5">
         <Button size="large" color="shade" onClick={() => toggleSidenav()}>
           <b className="material-icons max-lg:hidden lg:block">arrow_back</b>

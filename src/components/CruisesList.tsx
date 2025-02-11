@@ -18,7 +18,10 @@ export default function CruiseList({
   const router = useRouter();
 
   return (
-    <div className="flex-1 bg-primary-100 pl-5 pr-12 pt-10 pb-10 text-primary-300 overflow-y-auto overflow-x-auto">
+    <div
+      className="flex-1 bg-primary-100 pl-5 pr-12 pt-10 pb-10 text-primary-300 overflow-y-auto overflow-x-auto"
+      data-testid="cruise-list"
+    >
       <section>
         <div className="flex flex-row justify-end gap-5">
           <Sort params={params} />
