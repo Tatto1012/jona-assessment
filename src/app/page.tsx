@@ -5,7 +5,7 @@ import { filterData } from "@/services/filter-data";
 import { SailingParams } from "@/types";
 
 interface PageProps {
-  searchParams: SailingParams;
+  searchParams: Promise<SailingParams>;
 }
 
 export default async function Home({ searchParams }: PageProps) {
