@@ -1,4 +1,5 @@
 export { default as Sidenav } from "./Sidenav";
+export { default as CruisesList } from "./CruisesList";
 export { default as Button } from "./Button";
 export { default as Input } from "./Input";
 export { default as Card } from "./Card";

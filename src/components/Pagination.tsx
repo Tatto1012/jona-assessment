@@ -2,72 +2,34 @@
 
 import { JSX } from "react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { SailingParamsConversion } from "@/types";
+import { getPageNumbers } from "@/helpers";
 
 type PaginationProps = {
-  currentPage: number;
+  params: SailingParamsConversion;
   totalPages: number;
   [key: string]: unknown;
 };
 
 export default function Pagination({
-  currentPage,
+  params,
   totalPages,
 }: PaginationProps): JSX.Element {
-  currentPage = Number(currentPage);
+  const { page: actualPage } = params;
   const pathname = usePathname();
-  const params = useSearchParams();
-  const query = Object.fromEntries(params);
-
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxVisible = 3;
-
-    if (totalPages <= maxVisible + 2) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-
-    if (currentPage <= maxVisible) {
-      pages.push(
-        ...Array.from({ length: maxVisible }, (_, i) => i + 1),
-        "...",
-        totalPages
-      );
-    } else if (currentPage >= totalPages - maxVisible + 1) {
-      pages.push(
-        1,
-        "...",
-        ...Array.from(
-          { length: maxVisible },
-          (_, i) => totalPages - maxVisible + 1 + i
-        )
-      );
-    } else {
-      pages.push(
-        1,
-        "...",
-        currentPage - 1,
-        currentPage,
-        currentPage + 1,
-        "...",
-        totalPages
-      );
-    }
-
-    return pages;
-  };
 
   return (
-    <ul className="flex justify-start gap-4 mt-5 p-5 bg-secondary-250 rounded w-auto text-xl">
+    <ul className="flex justify-start lg:gap-4 mt-5 p-2 lg:p-5 bg-secondary-250 rounded w-auto lg:text-xl">
       <li>
         <Link
-          aria-disabled={currentPage <= 1}
+          aria-disabled={actualPage <= 1}
           href={{
             pathname,
             query: {
-              ...query,
-              page: currentPage - 1 > 0 ? currentPage - 1 : 1,
+              ...params,
+              page: actualPage - 1 > 0 ? actualPage - 1 : 1,
             },
           }}
           className="text-primary w-10 grid place-content-center"
@@ -75,7 +37,7 @@ export default function Pagination({
           <b
             className={clsx(
               "material-icons",
-              currentPage === 1 ? "text-primary-200" : "text-primary-150"
+              actualPage === 1 ? "text-primary-200" : "text-primary-150"
             )}
           >
             chevron_left
@@ -83,19 +45,19 @@ export default function Pagination({
         </Link>
       </li>
 
-      {getPageNumbers().map((page, index) => (
+      {getPageNumbers(totalPages, actualPage).map((page, index) => (
         <li key={index}>
           <Link
             href={{
               pathname,
               query: {
-                ...query,
+                ...params,
                 page,
               },
             }}
             className={clsx(
-              "flex w-8 h-8 rounded-full place-content-center",
-              currentPage === page ? "bg-primary-100" : ""
+              "flex w-6 h-6 lg:w-8 lg:h-8 rounded-full place-content-center",
+              actualPage === page ? "bg-primary-100" : ""
             )}
           >
             {page}
@@ -105,12 +67,12 @@ export default function Pagination({
 
       <li>
         <Link
-          aria-disabled={currentPage <= 1}
+          aria-disabled={actualPage <= 1}
           href={{
             pathname,
             query: {
-              ...query,
-              page: currentPage + 1 > 0 ? currentPage + 1 : 1,
+              ...params,
+              page: actualPage + 1 > 0 ? actualPage + 1 : 1,
             },
           }}
           className="text-primary w-10 grid place-content-center"
@@ -118,7 +80,7 @@ export default function Pagination({
           <b
             className={clsx(
               "material-icons",
-              currentPage === totalPages
+              actualPage === totalPages
                 ? "text-primary-200"
                 : "text-primary-150"
             )}

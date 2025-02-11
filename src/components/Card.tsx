@@ -12,11 +12,11 @@ type CardProps = {
 export default function Card({ sailing, ...rest }: CardProps): JSX.Element {
   return (
     <div
-      className="rounded-xl overflow-hidden w-full shadow-2xl flex flex-row justify-between border"
+      className="rounded-xl overflow-hidden w-full shadow-2xl flex flex-col lg:flex-row justify-between border"
       {...rest}
     >
       <div className="relative">
-        <div className="h-full w-80 relative">
+        <div className="h-full w-full lg:w-60 relative">
           {sailing.ship.image && (
             <Image
               className="w-full h-full object-cover"
@@ -33,10 +33,10 @@ export default function Card({ sailing, ...rest }: CardProps): JSX.Element {
       </div>
 
       <div className="flex flex-col flex-1">
-        <div className="flex flex-row justify-between px-5 py-4 flex-1">
+        <div className="flex flex-col lg:flex-row justify-between px-5 py-4 flex-1">
           <div className="flex flex-col">
             <h2 className="text-3xl font-bold">{sailing.name}</h2>
-            <div className="text-secondary-50 flex flex-row gap-5 my-3">
+            <div className="text-secondary-50 flex flex-col lg:flex-row gap-5 my-3">
               <span>{sailing.region}</span>
               <span>{sailing.duration} nights</span>
 
@@ -49,19 +49,21 @@ export default function Card({ sailing, ...rest }: CardProps): JSX.Element {
               </div>
             </div>
 
-            <div className="flex flex-row font-bold truncate max-w-[500px]">
+            <div className="font-bold truncate max-w-[60vw] lg:max-w-[20vw]">
               {sailing.itinerary.map((itinerary, index) => (
-                <div key={index} className="flex flex-row items-center">
+                <div key={index} className="inline-block items-center">
                   <span>{itinerary}</span>
-                  <b className="material-icons text-sm text-primary-150 m-1">
-                    arrow_forward
-                  </b>
+                  {index !== sailing.itinerary.length - 1 && (
+                    <b className="material-icons text-sm text-primary-150 m-1">
+                      arrow_forward
+                    </b>
+                  )}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col items-end min-w-[200px]">
+          <div className="flex flex-col items-center p-8 lg:p-0 lg:items-end  w-auto">
             {sailing.ship.line.logo && (
               <Image
                 src={sailing.ship.line.logo}

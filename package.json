@@ -24,7 +24,8 @@
     "react": "^19.0.0",
     "react-datepicker": "^8.0.0",
     "react-dom": "^19.0.0",
-    "start-server-and-test": "^2.0.10"
+    "start-server-and-test": "^2.0.10",
+    "swr": "^2.3.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

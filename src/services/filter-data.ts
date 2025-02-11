@@ -1,70 +1,83 @@
-import { Sailing, SelectOption } from "@/types";
+import { ITEMS_PER_PAGE } from "@/config";
 
-const ITEMS_PER_PAGE = 3;
+import { Sailing, SailingParamsConversion, SailingData } from "@/types";
 
 export const filterData = (
   data: Sailing[],
-  currentPage?: number,
-  selectedOption?: SelectOption,
-  q?: { [key: string]: string }
-) => {
-  // filter by search
-  const filteredDataBySearch = q !== undefined ? searchData(data, q) : data;
-  // sort by category asc/desc
-  const sortedData =
-    selectedOption !== undefined
-      ? sortData(filteredDataBySearch, selectedOption)
-      : filteredDataBySearch;
-  // paginate results
-  return currentPage && currentPage > 0
-    ? paginateData(sortedData, currentPage)
-    : paginateData(sortedData, 1);
+  params: SailingParamsConversion
+): SailingData => {
+  const { page, sort, order, departure, cruiseline } = params;
+
+  const filteredDataBySearch = searchData(data, departure, cruiseline);
+
+  const sortedData = sortData(filteredDataBySearch, sort, order);
+
+  return paginateData(sortedData, page);
 };
 
 export const searchData = (
   data: Sailing[],
-  criteria: { [key: string]: string }
-) => {
-  return data.filter((cruise) => {
-    const matchDepartureDate = criteria.departureDate
-      ? cruise.departureDate.includes(criteria.departureDate)
-      : true;
+  departure: string,
+  cruiseline: string
+): Sailing[] => {
+  if (departure || cruiseline) {
+    return data.filter((cruise) => {
+      const matchDepartureDate =
+        departure && cruise.departureDate
+          ? cruise.departureDate.replace(/[-–—]/g, "-").trim() ===
+            departure.replace(/[-–—]/g, "-").trim()
+          : true;
 
-    const matchCruiseLine = criteria.cruiseLine
-      ? cruise.ship.line.name
-          .toLowerCase()
-          .includes(criteria.cruiseLine.toLowerCase())
-      : true;
+      const matchCruiseLine = cruiseline
+        ? cruise.ship.line.name.toLowerCase().includes(cruiseline.toLowerCase())
+        : true;
 
-    return matchDepartureDate && matchCruiseLine;
-  });
+      return matchDepartureDate && matchCruiseLine;
+    });
+  } else {
+    return data;
+  }
 };
 
-export const sortData = (data: Sailing[], selectedOption: SelectOption) => {
-  const {
-    value: [key, order],
-  } = selectedOption;
+export const sortData = (
+  data: Sailing[],
+  sort: string,
+  order: string
+): Sailing[] => {
+  if (!sort && !order) {
+    return data;
+  } else {
+    return data.slice().sort((a, b) => {
+      const valueA =
+        sort === "departureDate" ? new Date(a[sort]) : a[sort as keyof Sailing];
+      const valueB =
+        sort === "departureDate" ? new Date(b[sort]) : b[sort as keyof Sailing];
 
-  return data.slice().sort((a, b) => {
-    const valueA = key === "departureDate" ? new Date(a[key]) : a[key];
-    const valueB = key === "departureDate" ? new Date(b[key]) : b[key];
-
-    if (order === "asc") {
-      return valueA > valueB ? 1 : -1;
-    } else {
-      return valueA < valueB ? 1 : -1;
-    }
-  });
+      if (order === "asc") {
+        return valueA > valueB ? 1 : -1;
+      } else {
+        return valueA < valueB ? 1 : -1;
+      }
+    });
+  }
 };
 
-export const paginateData = (data: Sailing[], currentPage: number) => {
-  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const results = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+export const paginateData = (data: Sailing[], page: number): SailingData => {
+  if (page < 1) {
+    return {
+      totalItems: data.length,
+      totalPages: data.length / ITEMS_PER_PAGE,
+      results: data,
+    };
+  } else {
+    const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const results = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  return {
-    totalItems: data.length,
-    totalPages,
-    results,
-  };
+    return {
+      totalItems: data.length,
+      totalPages,
+      results,
+    };
+  }
 };
